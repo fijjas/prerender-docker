@@ -7,7 +7,13 @@ process.env.DEBUG = process.env.DEBUG || 0;
 var server = prerender({
   workers: process.env.PRERENDER_NUM_WORKERS || 4,
   iterations: process.env.PRERENDER_NUM_ITERATIONS || 25,
-  softIterations: process.env.PRERENDER_NUM_SOFT_ITERATIONS || 10
+  softIterations: process.env.PRERENDER_NUM_SOFT_ITERATIONS || 10,
+  onStdout: function(data) {
+    console.log('[PHANTOM_DEBUG]', data);
+  },
+  onStderr: function(data) {
+    console.log('[PHANTOM_ERROR]', data);
+  }
 });
 
 server.use(forwardHeaders);
