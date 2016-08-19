@@ -2,6 +2,8 @@ var prerender = require('prerender');
 
 var forwardHeaders = require('./forwardHeaders');
 
+process.env.DEBUG = process.env.DEBUG || 0;
+
 var server = prerender({
   workers: process.env.PRERENDER_NUM_WORKERS || 4,
   iterations: process.env.PRERENDER_NUM_ITERATIONS || 25,
@@ -12,7 +14,9 @@ server.use(forwardHeaders);
 server.use(prerender.sendPrerenderHeader());
 server.use(prerender.removeScriptTags());
 server.use(prerender.httpHeaders());
-
+if (process.env.DEBUG == 1) {
+  server.use(prerender.logger());
+}
 server.start();
 
 function shutdown() {
