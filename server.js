@@ -2,25 +2,22 @@ var prerender = require('prerender');
 
 var forwardHeaders = require('./forwardHeaders');
 
-process.env.DEBUG = process.env.DEBUG || 0;
+var isDebug = process.env.DEBUG || 0;
 
 var server = prerender({
-  workers: process.env.PRERENDER_NUM_WORKERS || 4,
-  iterations: process.env.PRERENDER_NUM_ITERATIONS || 25,
-  softIterations: process.env.PRERENDER_NUM_SOFT_ITERATIONS || 10,
-  onStdout: function(data) {
-    console.log('[PHANTOM_DEBUG]', data);
-  },
-  onStderr: function(data) {
-    console.log('[PHANTOM_ERROR]', data);
-  }
+  workers: process.env.PRERENDER_NUM_WORKERS || 8,
+  iterations: process.env.PRERENDER_NUM_ITERATIONS || 40,
+  softIterations: process.env.PRERENDER_NUM_SOFT_ITERATIONS || 30,
+  cookiesEnabled: true,
+  logRequests: isDebug,
+  waitAfterLastRequest: 1000
 });
 
 server.use(forwardHeaders);
 server.use(prerender.sendPrerenderHeader());
 server.use(prerender.removeScriptTags());
 server.use(prerender.httpHeaders());
-if (process.env.DEBUG == 1) {
+if (isDebug == 1) {
   server.use(prerender.logger());
 }
 server.start();
