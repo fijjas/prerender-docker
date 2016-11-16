@@ -1,6 +1,6 @@
 var prerender = require('prerender');
 var forwardHeaders = require('./forwardHeaders');
-// var redisCache = require('./redisCache');
+var redisCache = require('./redisCache');
 
 var isDebug = process.env.DEBUG || 0;
 
@@ -15,7 +15,7 @@ var server = prerender({
 
 console.log('>> Starting the Prerender');
 
-// server.use(redisCache);
+server.use(redisCache);
 server.use(forwardHeaders);
 server.use(prerender.sendPrerenderHeader());
 server.use(prerender.removeScriptTags());
