@@ -1,5 +1,5 @@
 FROM node:latest
-MAINTAINER Magnet.me
+MAINTAINER egor@vorozhtsov.com.ru
 
 EXPOSE 3000
 

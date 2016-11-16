@@ -1,0 +1,35 @@
+version: "2"
+
+networks:
+  back-tier:
+    driver: bridge
+  front-tier:
+    driver: bridge
+
+services:
+
+  redis:
+    hostname: redis
+    image: redis:3-alpine
+    expose:
+      - 6379
+    networks:
+      - back-tier
+
+  prerenderer:
+    build: ./
+    command: npm run start
+    environment:
+      DEBUG: 1
+      PORT: 3000
+      REDIS_HOST: "redis"
+      REDIS_PORT: 6379
+    expose:
+      - 3000
+    ports:
+      - "33336:3000"
+    networks:
+      - front-tier
+      - back-tier
+    links:
+      - redis

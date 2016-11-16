@@ -32,7 +32,7 @@ module.exports = {
       //see: http://phantomjs.org/api/webpage/property/custom-headers.html
       page.onInitialized = function() {
         page.customHeaders = {};
-      }
+      };
 
       resolve();
     }
